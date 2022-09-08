@@ -25,7 +25,7 @@ for k,v := range queryParams {
 
 func main() {
 
-	var responses float64 = 100
+	var responses float64 = 10
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 1; i < int(responses)+1; i++ {
@@ -45,7 +45,15 @@ func main() {
 					fromAnswers = append(fromAnswers, singleAnswer)
 				}
 			} else if question.QuestionType == "multiple-choice" {
-				fmt.Println("a")
+				randomNumber := rand.Intn(len(question.PossibleAnsweres))
+
+				for i := 0; i < randomNumber; i++ {
+					singleAnswer := Answer{
+						QueryParam: question.EntryURLQueryParam,
+						Value:      getAnswer(&question, responses, i),
+					}
+					fromAnswers = append(fromAnswers, singleAnswer)
+				}
 			} else {
 				singleAnswer := Answer{
 					QueryParam: question.EntryURLQueryParam,

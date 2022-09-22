@@ -12,7 +12,7 @@ import (
 
 /* Get Query params
 const formPrefilledURL string =
-"https://docs.google.com/forms/d/e/1FAIpQLSc9QKh4qcopFSqAztrvvYyVqsi06IyMWOS9I_OPXCw58kBVJQ/viewform?usp=pp_url&entry.1339899397=cde&entry.322260907=Option+2&entry.322260907=Option+3"
+"https://docs.google.com/forms/d/e/1FAIpQLSf3jCJ1EX20GDRbFOz5QGy8MDV_52OYL_V08g3Hnees5VPrSQ/viewform?"
 queryParams := parseUrlEntry(formPrefilledURL)
 q := req.URL.Query()
 
@@ -25,14 +25,15 @@ for k,v := range queryParams {
 
 func main() {
 
-	var responses float64 = 10
+	var responses float64 = 100
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 1; i < int(responses)+1; i++ {
 		fromAnswers := []Answer{}
 
 		// For each question, generate answer
-		for _, question := range Questions {
+		for _, question := range RealData {
+
 			// If the quesiton is grid type, we need to iterate over all sub questions in the grid
 			if question.QuestionType == "grid" {
 				for _, subquestion := range question.PossibleAnsweres[0].GridTypeAnswers {
@@ -44,7 +45,7 @@ func main() {
 					// Define single response containing answers to all questions
 					fromAnswers = append(fromAnswers, singleAnswer)
 				}
-			} else if question.QuestionType == "multiple-choice" {
+			} else if question.QuestionType == "abc" {
 				randomNumber := rand.Intn(len(question.PossibleAnsweres))
 
 				for i := 0; i < randomNumber; i++ {
@@ -68,7 +69,7 @@ func main() {
 		sendRequests(fromAnswers)
 
 		// Delay execution by 2 seconds not to get rate limited by Google
-		//time.Sleep(2 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
 }
 
@@ -86,6 +87,7 @@ func getAnswer(question *SingleQuestion, numberOfResponses float64, currentRespo
 				break
 			}
 		}
+
 		// Decrease the counter as it is invalid answer
 		question.PossibleAnsweres[randomNumber].AlreadyGenerated -= 1
 
@@ -97,7 +99,7 @@ func getAnswer(question *SingleQuestion, numberOfResponses float64, currentRespo
 }
 
 func sendRequests(answers []Answer) {
-	formURL := "https://docs.google.com/forms/d/e/1FAIpQLSc9QKh4qcopFSqAztrvvYyVqsi06IyMWOS9I_OPXCw58kBVJQ/formResponse"
+	formURL := "https://docs.google.com/forms/d/e/1FAIpQLSf3jCJ1EX20GDRbFOz5QGy8MDV_52OYL_V08g3Hnees5VPrSQ/formResponse"
 
 	req, err := http.NewRequest("POST", formURL, nil)
 

@@ -99,8 +99,7 @@ func getAnswer(question *SingleQuestion, numberOfResponses float64, currentRespo
 }
 
 func sendRequests(answers []Answer) {
-	formURL := "https://docs.google.com/forms/d/e/1FAIpQLSf3jCJ1EX20GDRbFOz5QGy8MDV_52OYL_V08g3Hnees5VPrSQ/formResponse"
-
+	formURL := "https://docs.google.com/forms/d/e/1FAIpQLSf-AtlBGIyEbu_9p7etc6_1nBSMJ0NPU4WXxuzTp1CBscl5Xg/formResponse"
 	req, err := http.NewRequest("POST", formURL, nil)
 
 	if err != nil {
